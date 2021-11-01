@@ -55,7 +55,7 @@ async def wb_sched():
         user = await db.get_user(uid)
         assert user is not None
         name = user.name
-        weibo_id = user.weibo_id
+        weibo_id = str(user.weibo_id)
 
     logger.info(f'爬取微博 {name}（{weibo_id}, {uid}）')
     wr = WeiboReq(cookie)

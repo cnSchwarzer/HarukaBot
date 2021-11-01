@@ -8,7 +8,7 @@ class Weibo():
         self.uid = wb['user']['id']
         self.name = wb['user']['screen_name']
         self.url = f"https://weibo.com/{self.uid}/{self.id}"
-        self.time = parser.parse(wb['created_at']).timestamp()
+        self.time = int(parser.parse(wb['created_at']).timestamp())
 
     async def format(self, img):
         self.message = (f"{self.name} " +
