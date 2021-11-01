@@ -70,7 +70,7 @@ async def wb_sched():
 
     for weibo in weibos[4::-1]:  # 从旧到新取最近5条动态
         weibo = Weibo(weibo)
-        if weibo.time > last_time[weibo_id] and weibo.time > datetime.now().timestamp() - timedelta(minutes=10).seconds:
+        if weibo.time > last_time[weibo_id]:
             logger.info(f"检测到新微博（{weibo.id}）：{name}（{weibo_id}, {uid}）")
             image = None
             for _ in range(3):
