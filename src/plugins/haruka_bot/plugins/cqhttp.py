@@ -5,7 +5,7 @@ from nonebot.log import logger
 import subprocess
 from ..utils import scheduler
 
-cq = subprocess.Popen("./go-cqhttp")
+cq = subprocess.Popen("./go-cqhttp faststart")
 logger.success(f"go-cqhttp pid={cq.pid}")
 
 # restart cqhttp every 30 minutes
@@ -13,6 +13,6 @@ logger.success(f"go-cqhttp pid={cq.pid}")
 def cq_sched():
     global cq
     cq.kill()
-    cq = subprocess.Popen("./go-cqhttp")
+    cq = subprocess.Popen("./go-cqhttp faststart")
     logger.success(f"go-cqhttp pid={cq.pid}")
 
