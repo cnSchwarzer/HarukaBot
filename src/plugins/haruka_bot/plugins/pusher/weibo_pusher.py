@@ -18,6 +18,8 @@ if j.exists():
     except:
         last_time = {}
 
+logger.info(f'weibo pull state {last_time}')
+
 def convert_cookie(cookie):
     ret = []
     for c in cookie.split(';'):

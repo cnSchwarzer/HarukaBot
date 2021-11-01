@@ -16,6 +16,7 @@ if j.exists():
         last_time = json.loads(j.read_text('utf-8'))
     except:
         last_time = {}
+logger.info(f'dynamic pull state {last_time}')
 
 
 @scheduler.scheduled_job('interval', seconds=5, id='dynamic_sched')
