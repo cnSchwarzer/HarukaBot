@@ -6,13 +6,13 @@ import subprocess
 from ..utils import scheduler
 
 cq = subprocess.Popen("./go-cqhttp")
-logger.success(f"go-cqhttp pid = {cq.pid}")
+logger.success(f"go-cqhttp pid={cq.pid}")
 
 # restart cqhttp every 30 minutes
 @scheduler.scheduled_job('interval', seconds=60, id='cq')
 def cq_sched():
     global cq
     cq.kill()
-    cq = subprocess.Popen("./go-cqhttp/go-cqhttp")
-    logger.success(f"go-cqhttp pid = {cq.pid}")
+    cq = subprocess.Popen("./go-cqhttp")
+    logger.success(f"go-cqhttp pid={cq.pid}")
 

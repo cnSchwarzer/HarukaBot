@@ -1,7 +1,7 @@
 import asyncio
 import traceback
 from datetime import datetime, timedelta
-
+import json
 from nonebot.log import logger
 from pathlib import Path
 
@@ -11,7 +11,12 @@ from ...libs.weibo import Weibo
 from ...utils import safe_send, scheduler, get_weibo_screenshot
 
 last_time = {}
-
+j = Path("weibo_pull.json")
+if j.exists():
+    try:
+        last_time = json.loads(j.read_text('utf-8'))
+    except:
+        last_time = {}
 
 def convert_cookie(cookie):
     ret = []
@@ -60,6 +65,7 @@ async def wb_sched():
     if weibo_id not in last_time:  # 没有爬取过这位主播就把最新一条动态时间为 last_time
         weibo = Weibo(weibos[0])
         last_time[weibo_id] = weibo.time
+        j.write_text(json.dumps(last_time))
         return
 
     for weibo in weibos[4::-1]:  # 从旧到新取最近5条动态
@@ -85,3 +91,4 @@ async def wb_sched():
                     await safe_send(sets.bot_id, sets.type, sets.type_id, weibo.message)
 
             last_time[weibo_id] = weibo.time
+            j.write_text(json.dumps(last_time))

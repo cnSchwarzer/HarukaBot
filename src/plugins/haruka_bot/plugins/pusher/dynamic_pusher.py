@@ -1,15 +1,22 @@
 import asyncio
 import traceback
 from datetime import datetime, timedelta
-
+from pathlib import Path
 from nonebot.log import logger
-
+import json
 from ...libs.bilireq import BiliReq
 from ...database import DB
 from ...libs.dynamic import Dynamic
 from ...utils import safe_send, scheduler, get_dynamic_screenshot
 
 last_time = {}
+j = Path("dynamic_pull.json")
+if j.exists():
+    try:
+        last_time = json.loads(j.read_text('utf-8'))
+    except:
+        last_time = {}
+
 
 @scheduler.scheduled_job('interval', seconds=5, id='dynamic_sched')
 async def dy_sched():
@@ -35,6 +42,7 @@ async def dy_sched():
     if uid not in last_time: # 没有爬取过这位主播就把最新一条动态时间为 last_time
         dynamic = Dynamic(dynamics[0])
         last_time[uid] = dynamic.time
+        j.write_text(json.dumps(last_time))
         return
     
     for dynamic in dynamics[4::-1]: # 从旧到新取最近5条动态
@@ -60,4 +68,5 @@ async def dy_sched():
                     await safe_send(sets.bot_id, sets.type, sets.type_id, dynamic.message)
 
             last_time[uid] = dynamic.time
+            j.write_text(json.dumps(last_time))
     await db.update_user(uid, dynamic.name) # type: ignore
