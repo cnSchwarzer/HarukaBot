@@ -9,7 +9,7 @@ cq = subprocess.Popen("./go-cqhttp")
 logger.success(f"go-cqhttp pid={cq.pid}")
 
 # restart cqhttp every 30 minutes
-@scheduler.scheduled_job('interval', seconds=60, id='cq')
+@scheduler.scheduled_job('interval', seconds=1800, id='cq')
 def cq_sched():
     global cq
     cq.kill()
