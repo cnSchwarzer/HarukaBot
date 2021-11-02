@@ -29,7 +29,7 @@ async def get_dynamic_screenshot(url):
     page = None
     try:
         page = await browser.new_page(device_scale_factor=1,
-                                      viewport={"width": 2560, "height": 1080})
+                                      viewport={"width": 1920, "height": 1080})
         await page.goto(url, wait_until='networkidle', timeout=10000)
         card = await page.query_selector(".card")
         assert card
@@ -40,7 +40,7 @@ async def get_dynamic_screenshot(url):
         bar_bound = await bar.bounding_box()
         assert bar_bound
         clip['height'] = bar_bound['y'] - clip['y']
-        image = await page.screenshot(clip=clip, full_page=True, type="jpeg", quality=80)
+        image = await page.screenshot(clip=clip, full_page=True, type="jpeg", quality=100)
         await page.close()
         return base64.b64encode(image).decode()
     except Exception:
@@ -53,16 +53,16 @@ async def get_weibo_screenshot(url, cookie):
     browser = await get_browser()
     page = None
     try:
-        page = await browser.new_page(device_scale_factor=2,
+        page = await browser.new_page(device_scale_factor=1,
                                       user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.54 Safari/537.36 Edg/95.0.1020.30',
-                                      viewport={"width": 2560, "height": 1080})
+                                      viewport={"width": 1920, "height": 1080})
         await page.context.add_cookies(cookie)
         await page.goto(url, wait_until='networkidle', timeout=30000)
         card = await page.query_selector("article")
         assert card
         clip = await card.bounding_box()
         assert clip
-        image = await page.screenshot(clip=clip, full_page=True, type="jpeg", quality=80)
+        image = await page.screenshot(clip=clip, full_page=True, type="jpeg", quality=100)
         await page.close()
         return base64.b64encode(image).decode()
     except Exception:
