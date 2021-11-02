@@ -57,7 +57,7 @@ async def wb_sched():
         name = user.name
         weibo_id = str(user.weibo_id)
 
-    logger.info(f'爬取微博 {name}（{weibo_id}, {uid}）')
+    logger.debug(f'爬取微博 {name}（{weibo_id}, {uid}）')
     wr = WeiboReq(cookie)
     weibos = (await wr.get_user_weibo(weibo_id)).get('list', [])
 

@@ -31,7 +31,7 @@ async def dy_sched():
         assert user is not None
         name = user.name
 
-    logger.info(f'爬取动态 {name}（{uid}）')
+    logger.debug(f'爬取动态 {name}（{uid}）')
     br = BiliReq()
     dynamics = (await br.get_user_dynamics(uid)).get('cards', []) # 获取最近十二条动态
     # config['uid'][uid]['name'] = dynamics[0]['desc']['user_profile']['info']['uname']
