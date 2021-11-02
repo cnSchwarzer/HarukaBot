@@ -28,7 +28,7 @@ async def get_dynamic_screenshot(url):
     browser = await get_browser()
     page = None
     try:
-        page = await browser.new_page(device_scale_factor=2,
+        page = await browser.new_page(device_scale_factor=1,
                                       viewport={"width": 2560, "height": 1080})
         await page.goto(url, wait_until='networkidle', timeout=10000)
         card = await page.query_selector(".card")
@@ -40,7 +40,7 @@ async def get_dynamic_screenshot(url):
         bar_bound = await bar.bounding_box()
         assert bar_bound
         clip['height'] = bar_bound['y'] - clip['y']
-        image = await page.screenshot(clip=clip, full_page=True)
+        image = await page.screenshot(clip=clip, full_page=True, type="jpeg", quality=80)
         await page.close()
         return base64.b64encode(image).decode()
     except Exception:
@@ -62,7 +62,7 @@ async def get_weibo_screenshot(url, cookie):
         assert card
         clip = await card.bounding_box()
         assert clip
-        image = await page.screenshot(clip=clip, full_page=True)
+        image = await page.screenshot(clip=clip, full_page=True, type="jpeg", quality=80)
         await page.close()
         return base64.b64encode(image).decode()
     except Exception:
