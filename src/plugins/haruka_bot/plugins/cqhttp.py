@@ -14,7 +14,6 @@ logger.success(f"go-cqhttp pid={cq.pid}")
 @scheduler.scheduled_job('interval', seconds=1800, id='cq')
 def cq_sched():
     global cq
-    cq.send_signal(signal.CTRL_C_EVENT)
-    cq.send_signal(signal.SIGTERM)
+    cq.terminate()
     cq = subprocess.Popen(["./go-cqhttp", 'faststart'])
     logger.success(f"go-cqhttp pid={cq.pid}")
