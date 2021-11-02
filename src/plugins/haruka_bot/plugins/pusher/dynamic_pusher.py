@@ -8,6 +8,7 @@ from ...libs.bilireq import BiliReq
 from ...database import DB
 from ...libs.dynamic import Dynamic
 from ...utils import safe_send, scheduler, get_dynamic_screenshot
+from nonebot.adapters.cqhttp.message import MessageSegment
 
 last_time = {}
 j = Path("dynamic_pull.json")
@@ -61,12 +62,13 @@ async def dy_sched():
                 await asyncio.sleep(0.1)
             if not image:
                 logger.error("已达到重试上限，将在下个轮询中重新尝试")
-            await dynamic.format(image)
+            await dynamic.format()
 
             async with DB() as db:
                 push_list = await db.get_push_list(uid, 'dynamic')
                 for sets in push_list:
                     await safe_send(sets.bot_id, sets.type, sets.type_id, dynamic.message)
+                    await safe_send(sets.bot_id, sets.type, sets.type_id, MessageSegment.image(f"base64://{image}"))
 
             last_time[uid] = dynamic.time
             j.write_text(json.dumps(last_time))

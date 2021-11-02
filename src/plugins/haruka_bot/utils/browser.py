@@ -29,13 +29,13 @@ async def get_dynamic_screenshot(url):
     page = None
     try:
         page = await browser.new_page(device_scale_factor=2,
-                                      viewport={"width": 2560, "height": 1080})
+                                      viewport={"width": 1920, "height": 1080})
         await page.goto(url, wait_until='networkidle', timeout=10000)
         card = await page.query_selector(".card")
         assert card
         clip = await card.bounding_box()
         assert clip
-        bar = await page.query_selector(".text-bar")
+        bar = await page.query_selector(".panel-area")
         assert bar
         bar_bound = await bar.bounding_box()
         assert bar_bound

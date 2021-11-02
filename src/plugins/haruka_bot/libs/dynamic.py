@@ -16,7 +16,7 @@ class Dynamic():
         self.name = dynamic['desc']['user_profile']['info'].get('uname')
         # self.name = dynamic['desc']['user_profile']['info'].get('uname', Config.get_name(self.uid))
 
-    async def format(self, img):
+    async def format(self):
         type_msg = {
             0: "发布了新动态",
             1: "转发了一条动态",
@@ -27,6 +27,5 @@ class Dynamic():
         }
         self.message = (f"{self.name} " +
                         f"{type_msg.get(self.type, type_msg[0])}：\n" +
-                        f"{self.url}\n" +
-                        MessageSegment.image(f"base64://{img}")
+                        f"{self.url}\n"
                         )
