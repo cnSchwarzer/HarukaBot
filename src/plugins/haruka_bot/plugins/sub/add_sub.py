@@ -1,7 +1,6 @@
 from nonebot import on_command
 from nonebot.adapters.cqhttp import Bot
 from nonebot.adapters.cqhttp.event import MessageEvent
-from nonebot.adapters.cqhttp.message import MessageSegment
 from nonebot.typing import T_State
 
 from ...database import DB
