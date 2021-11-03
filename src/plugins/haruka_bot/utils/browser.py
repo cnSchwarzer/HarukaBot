@@ -40,7 +40,7 @@ async def get_dynamic_screenshot(url):
         bar_bound = await bar.bounding_box()
         assert bar_bound
         clip['height'] = bar_bound['y'] - clip['y']
-        image = await page.screenshot(clip=clip, full_page=True, type="jpeg", quality=100)
+        image = await page.screenshot(clip=clip, full_page=True, type="png")
         await page.close()
         return base64.b64encode(image).decode()
     except Exception:
@@ -62,7 +62,7 @@ async def get_weibo_screenshot(url, cookie):
         assert card
         clip = await card.bounding_box()
         assert clip
-        image = await page.screenshot(clip=clip, full_page=True, type="jpeg", quality=100)
+        image = await page.screenshot(clip=clip, full_page=True, type="png")
         await page.close()
         return base64.b64encode(image).decode()
     except Exception:

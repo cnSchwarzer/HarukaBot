@@ -9,6 +9,7 @@ from ...libs.weiboreq import WeiboReq
 from ...database import DB
 from ...libs.weibo import Weibo
 from ...utils import safe_send, scheduler, get_weibo_screenshot
+from nonebot.adapters.cqhttp.message import MessageSegment
 
 last_time = {}
 j = Path("weibo_pull.json")
@@ -85,12 +86,13 @@ async def wb_sched():
                 await asyncio.sleep(0.1)
             if not image:
                 logger.error("已达到重试上限，将在下个轮询中重新尝试")
-            await weibo.format(image)
+            await weibo.format()
 
             async with DB() as db:
                 push_list = await db.get_push_list(uid, 'weibo')
                 for sets in push_list:
                     await safe_send(sets.bot_id, sets.type, sets.type_id, weibo.message)
+                    await safe_send(sets.bot_id, sets.type, sets.type_id, MessageSegment.image(f"base64://{image}"))
 
             last_time[weibo_id] = weibo.time
             j.write_text(json.dumps(last_time))

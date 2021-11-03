@@ -10,9 +10,8 @@ class Weibo():
         self.url = f"https://weibo.com/{self.uid}/{self.id}"
         self.time = int(parser.parse(wb['created_at']).timestamp())
 
-    async def format(self, img):
+    async def format(self):
         self.message = (f"{self.name} " +
                         f"发布了新微博：\n" +
-                        f"{self.url}\n" +
-                        MessageSegment.image(f"base64://{img}")
+                        f"{self.url}"
                         )
