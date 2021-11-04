@@ -75,6 +75,13 @@ async def wb_sched():
         weibo = Weibo(weibo)
         if weibo.time > last_time[weibo_id]:
             logger.info(f"检测到新微博（{weibo.id}）：{name}（{weibo_id}, {uid}）")
+
+            await weibo.format()
+            async with DB() as db:
+                push_list = await db.get_push_list(uid, 'weibo')
+                for sets in push_list:
+                    await safe_send(sets.bot_id, sets.type, sets.type_id, weibo.message, sets.at)
+
             image = None
             for _ in range(3):
                 try:
@@ -86,12 +93,10 @@ async def wb_sched():
                 await asyncio.sleep(0.1)
             if not image:
                 logger.error("已达到重试上限，将在下个轮询中重新尝试")
-            await weibo.format()
 
             async with DB() as db:
                 push_list = await db.get_push_list(uid, 'weibo')
                 for sets in push_list:
-                    await safe_send(sets.bot_id, sets.type, sets.type_id, weibo.message, sets.at)
                     await safe_send(sets.bot_id, sets.type, sets.type_id, MessageSegment.image(f"base64://{image}"))
 
             last_time[weibo_id] = weibo.time
