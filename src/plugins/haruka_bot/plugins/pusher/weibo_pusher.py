@@ -91,7 +91,7 @@ async def wb_sched():
             async with DB() as db:
                 push_list = await db.get_push_list(uid, 'weibo')
                 for sets in push_list:
-                    await safe_send(sets.bot_id, sets.type, sets.type_id, weibo.message)
+                    await safe_send(sets.bot_id, sets.type, sets.type_id, weibo.message, sets.at)
                     await safe_send(sets.bot_id, sets.type, sets.type_id, MessageSegment.image(f"base64://{image}"))
 
             last_time[weibo_id] = weibo.time

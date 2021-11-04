@@ -89,16 +89,20 @@ async def safe_send(bot_id, send_type, type_id, message, at=False):
     )['can_at_all']:
         message = MessageSegment.at('all') + message
 
-    try:
-        return await bot.call_api('send_' + send_type + '_msg', **{
-            'message': message,
-            'user_id' if send_type == 'private' else 'group_id': type_id
-        })
-    except ActionFailed as e:
-        url = "https://haruka-bot.sk415.icu/usage/faq.html#机器人不发消息也没反应"
-        logger.error(f"推送失败，账号可能被风控（{url}），错误信息：{e.info}")
-    except NetworkError as e:
-        logger.error(f"推送失败，请检查网络连接，错误信息：{e.msg}")
+    time = 3
+    while time > 0:
+        try:
+            return await bot.call_api('send_' + send_type + '_msg', **{
+                'message': message,
+                'user_id' if send_type == 'private' else 'group_id': type_id
+            })
+        except ActionFailed as e:
+            url = "https://haruka-bot.sk415.icu/usage/faq.html#机器人不发消息也没反应"
+            logger.error(f"推送失败，账号可能被风控（{url}），错误信息：{e.info}")
+        except NetworkError as e:
+            logger.error(f"推送失败，请检查网络连接，错误信息：{e.msg}")
+        finally:
+            time -= 1
 
 
 def get_type_id(event: MessageEvent):
