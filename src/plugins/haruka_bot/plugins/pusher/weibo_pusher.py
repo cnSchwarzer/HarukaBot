@@ -21,33 +21,18 @@ if j.exists():
 
 logger.info(f'weibo pull state {last_time}')
 
-def convert_cookie(cookie):
-    ret = []
-    for c in cookie.split(';'):
-        cp = c.split('=')
-        ret.append({'name': cp[0].strip(), 'value': cp[1].strip(), 'domain': 'weibo.com', 'path': '/'})
-    return ret
-
-
-cookie = None
 cookie_path = Path('./weibo.cookie')
-if cookie_path.exists():
-    cookie = json.loads(cookie_path.read_text('utf-8').strip())
-    logger.info('加载微博 Cookie')
-    logger.debug(cookie)
-else:
-    logger.error('未发现微博 Cookie: ./weibo.cookie')
-
-
-def save_cookie(c):
-    global cookie
-    cookie_path.write_text(json.dumps(c))
-    cookie = c
-
 
 @scheduler.scheduled_job('interval', seconds=5, id='weibo_sched')
 async def wb_sched():
     """微博推送"""
+    cookie = None
+    if cookie_path.exists():
+        cookie = json.loads(cookie_path.read_text('utf-8').strip())
+        logger.info('加载微博 Cookie')
+        logger.debug(cookie)
+    else:
+        logger.error('未发现微博 Cookie: ./weibo.cookie')
 
     if cookie is None:
         logger.debug('未发现微博 Cookie, 跳过')

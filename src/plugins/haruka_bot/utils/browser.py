@@ -2,13 +2,12 @@ import base64
 import shutil
 from pathlib import Path
 from typing import Optional
-
+import json
 from appdirs import AppDirs
 from nonebot import get_driver
 from nonebot.log import logger
 from playwright.async_api import Browser, async_playwright
 
-from ..plugins.pusher.weibo_pusher import save_cookie
 from . import config
 
 _browser: Optional[Browser] = None
@@ -66,7 +65,7 @@ async def get_weibo_screenshot(url, cookie):
         image = await page.screenshot(clip=clip, full_page=True, type="png")
         await page.close()
 
-        save_cookie(page.context.cookies())
+        Path('./weibo.cookie').write_text(json.dumps(page.context.cookies()))
 
         return base64.b64encode(image).decode()
     except Exception:

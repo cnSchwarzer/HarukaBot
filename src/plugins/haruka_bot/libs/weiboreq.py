@@ -8,7 +8,7 @@ import httpx
 from httpx import ConnectTimeout, ReadTimeout, ConnectError
 from nonebot.log import logger
 from httpx._types import URLTypes
-from ..plugins.pusher.weibo_pusher import save_cookie
+from pathlib import Path
 
 
 class RequestError(Exception):
@@ -61,7 +61,7 @@ class WeiboReq():
             for c in client.cookies.jar:
                 cookie_save.append({'name': c.name, 'value': c.value, 'domain': c.domain, 'path': c.path})
 
-            save_cookie(cookie_save)
+            Path('./weibo.cookie').write_text(json.dumps(cookie_save))
 
             return res['data']
 
