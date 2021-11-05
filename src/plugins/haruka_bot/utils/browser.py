@@ -8,6 +8,7 @@ from nonebot import get_driver
 from nonebot.log import logger
 from playwright.async_api import Browser, async_playwright
 
+from ..plugins.pusher.weibo_pusher import save_cookie
 from . import config
 
 _browser: Optional[Browser] = None
@@ -49,8 +50,6 @@ async def get_dynamic_screenshot(url):
         raise
 
 
-lost_state = False
-
 async def get_weibo_screenshot(url, cookie):
     browser = await get_browser()
     page = None
@@ -66,6 +65,9 @@ async def get_weibo_screenshot(url, cookie):
         assert clip
         image = await page.screenshot(clip=clip, full_page=True, type="png")
         await page.close()
+
+        save_cookie(page.context.cookies())
+
         return base64.b64encode(image).decode()
     except Exception:
         if page:

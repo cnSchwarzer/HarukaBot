@@ -30,15 +30,19 @@ def convert_cookie(cookie):
 
 
 cookie = None
-cookie_browser = None
 cookie_path = Path('./weibo.cookie')
 if cookie_path.exists():
-    cookie = cookie_path.read_text('utf-8').strip()
-    cookie_browser = convert_cookie(cookie)
+    cookie = json.loads(cookie_path.read_text('utf-8').strip())
     logger.info('加载微博 Cookie')
     logger.debug(cookie)
 else:
     logger.error('未发现微博 Cookie: ./weibo.cookie')
+
+
+def save_cookie(c):
+    global cookie
+    cookie_path.write_text(json.dumps(c))
+    cookie = c
 
 
 @scheduler.scheduled_job('interval', seconds=5, id='weibo_sched')
@@ -89,7 +93,7 @@ async def wb_sched():
             image = None
             for _ in range(3):
                 try:
-                    image = await get_weibo_screenshot(weibo.url, cookie_browser)
+                    image = await get_weibo_screenshot(weibo.url, cookie)
                     break
                 except Exception as e:
                     logger.error("截图失败")
