@@ -66,7 +66,7 @@ async def dy_sched():
             async with DB() as db:
                 push_list = await db.get_push_list(uid, 'dynamic')
                 for sets in push_list:
-                    await safe_send(sets.bot_id, sets.type, sets.type_id, dynamic.message. sets.at)
+                    await safe_send(sets.bot_id, sets.type, sets.type_id, dynamic.message, sets.at)
 
             last_time[uid] = dynamic.time
             j.write_text(json.dumps(last_time))

@@ -77,6 +77,7 @@ async def wb_sched():
             logger.info(f"检测到新微博（{weibo.id}）：{name}（{weibo_id}, {uid}）")
 
             await weibo.format()
+
             async with DB() as db:
                 push_list = await db.get_push_list(uid, 'weibo')
                 for sets in push_list:
