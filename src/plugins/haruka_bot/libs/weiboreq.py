@@ -44,8 +44,9 @@ class WeiboReq():
             except ReadTimeout:
                 logger.error(f"接收超时（{url}）")
                 raise
-            except Exception as e:
+            except UnicodeDecodeError as e:
                 logger.error(r.text)
+            except Exception as e:
                 logger.error(f"未知错误（{url}）")
                 raise
 
