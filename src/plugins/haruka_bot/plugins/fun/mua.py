@@ -8,7 +8,7 @@ from nonebot.log import logger
 from ...database import DB
 from ...utils import get_type_id, permission_check, to_me, handle_uid
 
-mua = nonebot.on_keyword({'mua'}, rule=to_me(), priority=5)
+mua = nonebot.on_keyword({'mua', '么'}, rule=to_me(), priority=5)
 
 @mua.handle()
 async def _(bot: Bot, event: MessageEvent, state: T_State):
