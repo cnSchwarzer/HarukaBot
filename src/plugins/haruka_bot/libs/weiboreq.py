@@ -32,7 +32,7 @@ class WeiboReq():
         }
 
     # TODO 制作一个装饰器捕获请求时的异常并用更友好的方式打印出来
-    async def request(self, method, url, **kw) -> Dict:
+    async def request(self, method, url, **kw) -> Optional[Any]:
         async with httpx.AsyncClient(timeout=5.0) as client:
             try:
                 r = await client.request(method, url, **kw)
@@ -47,9 +47,7 @@ class WeiboReq():
             except Exception as e:
                 logger.error(f"未知错误（{url}）")
                 logger.error(r.text)
-                return {}
-
-
+                return None
 
             if res['ok'] != 1:
                 raise RequestError(code=res['ok'],

@@ -60,7 +60,10 @@ async def wb_sched():
 
     logger.debug(f'爬取微博 {name}（{weibo_id}, {uid}）')
     wr = WeiboReq(cookie)
-    weibos = (await wr.get_user_weibo(weibo_id)).get('list', [])
+    weibos = await wr.get_user_weibo(weibo_id)
+    if weibos is None:
+        return
+    weibos = weibos.get('list', [])
 
     if len(weibos) == 0:  # 没有发过动态或者动态全删的直接结束
         return
