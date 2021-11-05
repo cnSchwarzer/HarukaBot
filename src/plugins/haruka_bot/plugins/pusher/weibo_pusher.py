@@ -29,7 +29,7 @@ async def wb_sched():
     cookie = None
     if cookie_path.exists():
         cookie = json.loads(cookie_path.read_text('utf-8').strip())
-        logger.info('加载微博 Cookie')
+        logger.debug('加载微博 Cookie')
         logger.debug(cookie)
     else:
         logger.error('未发现微博 Cookie: ./weibo.cookie')
