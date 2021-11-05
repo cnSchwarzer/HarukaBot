@@ -46,6 +46,10 @@ class WeiboReq():
                 raise
             except Exception as e:
                 logger.error(f"未知错误（{url}）")
+                logger.error(r.text)
+                return {}
+
+
 
             if res['ok'] != 1:
                 raise RequestError(code=res['ok'],
